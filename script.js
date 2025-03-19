@@ -65,14 +65,14 @@ class DistortionEffect {
     this.container.addEventListener("mouseenter", () => {
       gsap.to(this.material.uniforms.uProgress, {
         value: 1,
-        duration: 0.5,
+        duration: 1,
         ease: "power2.out",
       });
     });
     this.container.addEventListener("mouseleave", () => {
       gsap.to(this.material.uniforms.uProgress, {
         value: 0,
-        duration: 0.5,
+        duration: 1,
         ease: "power2.out",
       });
     });
