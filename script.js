@@ -46,8 +46,8 @@ class DistortionEffect {
       });
     };
 
-    this.texture1 = await loadTexture("image1.png");
-    this.texture2 = await loadTexture("image2.png");
+    this.texture1 = await loadTexture("images/reflection-right.webp");
+    this.texture2 = this.texture1;
     this.displacement = await loadTexture("displacement.png");
 
     // Ensure textures maintain aspect ratio and cover the plane
@@ -81,18 +81,29 @@ class DistortionEffect {
     this.scene.add(this.mesh);
   }
   addEventListeners() {
-    this.container.addEventListener("mouseenter", () => {
-      gsap.to(this.material.uniforms.uProgress, {
-        value: 1,
-        duration: 1,
-        ease: "power2.out",
+    const points = document.querySelectorAll(".hover-point");
+
+    points.forEach((point) => {
+      point.addEventListener("mouseenter", () => {
+        if (this.material) {
+          gsap.to(this.material.uniforms.uProgress, {
+            value: 1,
+            duration: 1,
+            ease: "power2.out",
+          });
+        } else {
+          console.error("Shader material is not initialized yet.");
+        }
       });
-    });
-    this.container.addEventListener("mouseleave", () => {
-      gsap.to(this.material.uniforms.uProgress, {
-        value: 0,
-        duration: 1,
-        ease: "power2.out",
+
+      point.addEventListener("mouseleave", () => {
+        if (this.material) {
+          gsap.to(this.material.uniforms.uProgress, {
+            value: 0,
+            duration: 1,
+            ease: "power2.out",
+          });
+        }
       });
     });
   }
@@ -105,8 +116,62 @@ class DistortionEffect {
 
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("webgl-container");
+  let distortionEffect;
+
   if (container) {
-    new DistortionEffect(container);
+    distortionEffect = new DistortionEffect(container);
+
+    // Add hover functionality for specific points
+    const points = [
+      { x: "25%", y: "30%", texture: "images/memory1.webp" },
+      { x: "85%", y: "50%", texture: "images/memory2.webp" },
+      { x: "60%", y: "80%", texture: "images/memory3.webp" },
+    ];
+
+    container.addEventListener("mousemove", (event) => {
+      const rect = container.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      let isHovering = false;
+
+      points.forEach((point) => {
+        const pointX = (parseFloat(point.x) / 100) * rect.width;
+        const pointY = (parseFloat(point.y) / 100) * rect.height;
+
+        const distance = Math.sqrt(
+          Math.pow(mouseX - pointX, 2) + Math.pow(mouseY - pointY, 2)
+        );
+
+        if (distance < 20) {
+          isHovering = true;
+
+          // Change the texture dynamically
+          if (distortionEffect && distortionEffect.material) {
+            const loader = new THREE.TextureLoader();
+            loader.load(point.texture, (newTexture) => {
+              distortionEffect.material.uniforms.uTexture2.value = newTexture;
+            });
+          }
+        }
+      });
+
+      if (distortionEffect && distortionEffect.material) {
+        if (isHovering) {
+          gsap.to(distortionEffect.material.uniforms.uProgress, {
+            value: 1,
+            duration: 1,
+            ease: "power2.out",
+          });
+        } else {
+          gsap.to(distortionEffect.material.uniforms.uProgress, {
+            value: 0,
+            duration: 1,
+            ease: "power2.out",
+          });
+        }
+      }
+    });
   } else {
     console.error("WebGL container not found in DOM!");
   }
