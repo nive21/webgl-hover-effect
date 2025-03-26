@@ -51,7 +51,7 @@ class DistortionEffect {
     );
     this.texture2 = this.texture1;
     this.displacement = await loadTexture(
-      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/displacement.png"
+      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/b0c247dacc7d57a622fe96bfc1a5999a9af3ab3b/images/memory1.webp"
     );
 
     // Ensure textures maintain aspect ratio and cover the plane
