@@ -46,17 +46,25 @@ class DistortionEffect {
       });
     };
 
-    this.texture1 = await loadTexture("images/reflection-right.webp");
+    this.texture1 = await loadTexture(
+      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/reflection-right.webp"
+    );
     this.texture2 = this.texture1;
-    this.displacement = await loadTexture("displacement.png");
+    this.displacement = await loadTexture(
+      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/displacement.png"
+    );
 
     // Ensure textures maintain aspect ratio and cover the plane
     this.texture1.wrapS = this.texture1.wrapT = THREE.ClampToEdgeWrapping;
     this.texture2.wrapS = this.texture2.wrapT = THREE.ClampToEdgeWrapping;
 
     // Load shaders
-    const vertexShader = await loadShader("vertexShader.glsl");
-    const fragmentShader = await loadShader("fragmentShader.glsl");
+    const vertexShader = await loadShader(
+      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/vertexShader.glsl"
+    );
+    const fragmentShader = await loadShader(
+      "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/fragmentShader.glsl"
+    );
 
     // Create shader material
     this.material = new THREE.ShaderMaterial({
@@ -123,9 +131,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add hover functionality for specific points
     const points = [
-      { x: "25%", y: "30%", texture: "images/memory1.webp" },
-      { x: "85%", y: "50%", texture: "images/memory2.webp" },
-      { x: "60%", y: "80%", texture: "images/memory3.webp" },
+      {
+        x: "25%",
+        y: "30%",
+        texture:
+          "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/memory1.webp",
+      },
+      {
+        x: "85%",
+        y: "50%",
+        texture:
+          "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/memory2.webp",
+      },
+      {
+        x: "60%",
+        y: "80%",
+        texture:
+          "https://raw.githubusercontent.com/nive21/webgl-hover-effect/fd26fb52520a38d22cb95d467bb319a6d88c50eb/images/memory3.webp",
+      },
     ];
 
     container.addEventListener("mousemove", (event) => {
